@@ -39,7 +39,10 @@ public class EnemyBase : MonoBehaviour
         if (colls.Length > 0)
         {
             rigidbody.AddForce(Time.deltaTime * speed * (colls[0].transform.position - this.transform.position), ForceMode.Impulse);
-            attack(colls[0].transform.gameObject);
+            if (colls[0].gameObject != null)
+            {
+                attack(colls[0].transform.gameObject);
+            }
         }
     }
 
@@ -64,7 +67,9 @@ public class EnemyBase : MonoBehaviour
         if (cooltime == 0)
         {
             //이거 태우가 적고 주석처리하라 한 코드~
-            GetComponent<PlayerState>().GetDamage(damage, this.transform.position);
+            //GetComponent는 당연히 플레이어의 컴포넌트를 가져와야 합니다...
+            //다음부터는 GetComponent 앞에 대상을 빼놓지 마세용...
+            gameObject.GetComponent<PlayerState>().GetDamage(damage, this.transform.position);
         }
     }
 }

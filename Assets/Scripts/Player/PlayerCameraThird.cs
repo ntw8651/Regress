@@ -22,7 +22,7 @@ public class PlayerCameraThird : MonoBehaviour
         // 마우스 입력에 따라 회전 값 업데이트
         currentRotationX += Input.GetAxis("Mouse X") * rotationSpeed;
         currentRotationY += Input.GetAxis("Mouse Y") * rotationSpeed;
-        currentRotationY = Mathf.Clamp(currentRotationY, -90, 90); // 상하 회전 각도 제한
+        currentRotationY = Mathf.Clamp(currentRotationY, -89, 89); // 상하 회전 각도 제한
 
         // 회전 값에 따라 카메라 위치 계산
         Quaternion rotation = Quaternion.Euler(currentRotationY, currentRotationX, 0);
