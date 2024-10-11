@@ -9,13 +9,13 @@ public class CheckInteraction : MonoBehaviour
 {
     public TMP_Text interactText;
     public GameObject targetObject;
+  
     private void Update()
     {
         Collider[] _colliders;
         _colliders = Physics.OverlapSphere(transform.position, 3f);
         if (_colliders.Length > 0)
         {
-            int _flag = 0;
             float _minDistance = float.MaxValue;
             GameObject _targetObject = null;
             foreach (var col in _colliders)
@@ -56,6 +56,10 @@ public class CheckInteraction : MonoBehaviour
         {
             interactText.text = "Press F to pick up the item";
         }
+        else if(interactable.Name == "NPC")
+        {
+            interactText.text = "Press F to talk to the NPC";
+        }
         else
         {
             interactText.text = "Press F to pick up " + interactable.Name;
@@ -68,4 +72,5 @@ public class CheckInteraction : MonoBehaviour
 
         }
     }
+
 }

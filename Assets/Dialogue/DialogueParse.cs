@@ -1,20 +1,34 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class DialogueParse : MonoBehaviour
 {
+    
     private static Dictionary<string, TalkData[]> DialoueDictionary = 
         new Dictionary<string, TalkData[]>();
     
     // [SerializeField] 는 private로 선언된 변수도 인스펙터 창에 노출되게 해줍니다.
     [SerializeField] private TextAsset csvFile = null;
-    /**                
+
+    public static TalkData[] GetDialogue(string eventName)
+    {
+        return DialoueDictionary[eventName];
+    }
+
+
+    private void Awake()
+    {
+        SetTalkDictionary();
+    }
+
+
     public void SetTalkDictionary()
     {
         // 아래 한 줄 빼기
         string csvText = csvFile.text.Substring(0, csvFile.text.Length - 1);
         // 줄바꿈(한 줄)을 기준으로 csv 파일을 쪼개서 string배열에 줄 순서대로 담음
-        string[] datas = csvText.Split(new char[] { '\n' }); 
+        string[] rows = csvText.Split(new char[] { '\n' }); 
 
         // 엑셀 파일 1번째 줄은 편의를 위한 분류이므로 i = 1부터 시작
         for (int i = 1; i < rows.Length; i++)
@@ -48,8 +62,7 @@ public class DialogueParse : MonoBehaviour
                 talkDataList.Add(talkData);
             }
 
-            TalkDictionary.Add(eventName, talkDataList.ToArray());
+            DialoueDictionary.Add(eventName, talkDataList.ToArray());
         }
     }
-    **/
 }
