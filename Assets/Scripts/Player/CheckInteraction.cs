@@ -58,7 +58,7 @@ public class CheckInteraction : MonoBehaviour
         }
         else if(interactable.Name == "NPC")
         {
-            interactText.text = "Press F to talk to the NPC";
+            interactText.text = "Press F to talk to the NPC.";
         }
         else
         {
