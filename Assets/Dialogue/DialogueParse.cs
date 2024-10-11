@@ -15,6 +15,8 @@ public class DialogueParse : MonoBehaviour
     {
         return DialoueDictionary[eventName];
     }
+    
+    // eoghkasldkfjkjksldkfj
 
 
     private void Awake()
