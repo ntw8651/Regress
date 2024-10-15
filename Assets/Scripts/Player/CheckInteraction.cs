@@ -21,7 +21,7 @@ public class CheckInteraction : MonoBehaviour
             foreach (var col in _colliders)
             {
                 // ReSharper disable once Unity.PerformanceCriticalCodeInvocation
-                IInteration interactable = col.GetComponent<IInteration>();
+                IInteraction interactable = col.GetComponent<IInteraction>();
                 
                 if (interactable != null)
                 {
@@ -46,7 +46,7 @@ public class CheckInteraction : MonoBehaviour
             interactText.text = "";
             return;
         }
-        IInteration interactable = targetObject.GetComponent<IInteration>();
+        IInteraction interactable = targetObject.GetComponent<IInteraction>();
 
         if (interactable.Name == "Door")
         {
@@ -56,7 +56,7 @@ public class CheckInteraction : MonoBehaviour
         {
             interactText.text = "Press F to pick up the item";
         }
-        else if(interactable.Name == "NPC")
+        else if(interactable.Name == "ITR")
         {
             interactText.text = "Press F to talk to the NPC";
         }
@@ -70,6 +70,18 @@ public class CheckInteraction : MonoBehaviour
             // ReSharper disable once Unity.PerformanceCriticalCodeInvocation
             interactable.Interact(transform.gameObject);
 
+        }
+    }
+    
+    public void DebugDialogue(TalkData[] talkDatas)
+    {
+        for (int i = 0; i < talkDatas.Length; i++)
+        {
+            // 캐릭터 이름 출력
+            Debug.Log(talkDatas[i].name);
+            // 대사들 출력
+            foreach (string context in talkDatas[i].contexts) 
+                Debug.Log(context);
         }
     }
 

@@ -1,10 +1,13 @@
 using System;
+using TMPro;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class DialogueParse : MonoBehaviour
 {
-    
+    public TMP_Text nameText;
+    public TMP_Text contextText;
+    // 대사를 저장할 구조체
     private static Dictionary<string, TalkData[]> DialoueDictionary = 
         new Dictionary<string, TalkData[]>();
     
@@ -15,11 +18,8 @@ public class DialogueParse : MonoBehaviour
     {
         return DialoueDictionary[eventName];
     }
-    
-    // eoghkasldkfjkjksldkfj
 
-
-    private void Awake()
+    private void Start()
     {
         SetTalkDictionary();
     }
@@ -28,9 +28,10 @@ public class DialogueParse : MonoBehaviour
     public void SetTalkDictionary()
     {
         // 아래 한 줄 빼기
-        string csvText = csvFile.text.Substring(0, csvFile.text.Length - 1);
+        // string csvText = csvFile.text.Substring(0, csvFile.text.Length - 1); -> 맥북이라 그런건지는 모르겠지만 대사 바꿀때마다 아래 줄바꿈이 없어서 이 코드를 뺌 & 아래 코드 추가
+        string csvText = csvFile.text; // 줄바꿈 생기면 위에 주석처리된 코드로 바꾸기
         // 줄바꿈(한 줄)을 기준으로 csv 파일을 쪼개서 string배열에 줄 순서대로 담음
-        string[] rows = csvText.Split(new char[] { '\n' }); 
+        string[] rows = csvText.Split(new char[] { '\n' });
 
         // 엑셀 파일 1번째 줄은 편의를 위한 분류이므로 i = 1부터 시작
         for (int i = 1; i < rows.Length; i++)
@@ -43,6 +44,7 @@ public class DialogueParse : MonoBehaviour
 
             List<TalkData> talkDataList = new List<TalkData>();
             string eventName = rowValues[0];
+            Debug.Log(eventName);
 
             while(rowValues[0].Trim() != "end") // talkDataList 하나를 만드는 반복문
             {
@@ -64,7 +66,24 @@ public class DialogueParse : MonoBehaviour
                 talkDataList.Add(talkData);
             }
 
-            DialoueDictionary.Add(eventName, talkDataList.ToArray());
+            DialoueDictionary.Add(eventName, talkDataList.ToArray()); // 이벤트 이름과 대사들을 딕셔너리에 추가
+        }
+    }
+    
+    public void DebugDialogue(TalkData[] talkDatas)
+    {
+        for (int i = 0; i < talkDatas.Length; i++)
+        {
+            // 캐릭터 이름 출력
+            Debug.Log(talkDatas[i].name);
+            nameText.text = talkDatas[i].name;
+            // 대사들 출력
+            foreach (string context in talkDatas[i].contexts)
+            {
+                Debug.Log(context);
+                contextText.text = context;
+            } 
+            
         }
     }
 }
