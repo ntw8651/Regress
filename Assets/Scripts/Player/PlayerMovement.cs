@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -19,7 +20,17 @@ public class PlayerMovement : MonoBehaviour
     public GameObject mPlayerObject;          // 플레이어 오브젝트
     
     private CharacterController _characterController; // 캐릭터 컨트롤러 컴포넌트
-    
+
+
+    //Ground Checking
+    [SerializeField]
+    private bool isGround;
+    private int playerLayerMask;//~Player임
+    [SerializeField]
+    private float playerFootSize;//몸통에서 아래쪽으로 케스팅 시작할 거리(클수록 아래)
+
+
+
     private Vector3 _mMoveInput;              // 플레이어 이동 입력값
     private Vector3 _verticalVelocity;        // 수직 속도
     
@@ -28,13 +39,38 @@ public class PlayerMovement : MonoBehaviour
         _characterController = GetComponent<CharacterController>(); // 캐릭터 컨트롤러 컴포넌트 가져오기
         player = transform.gameObject;
         playerState = player.GetComponent<PlayerState>();
+
+        playerLayerMask = (-1) - (1 << LayerMask.NameToLayer("Player"));
     }
     private void Update()
     {
         _mMoveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         Move();
+        GroundCheck();
     }
-    private void Move()
+    private void OnDrawGizmos()
+    {
+        // NEED DELETE : 이 코드는 점프 코드가 안정화 될 때까지 유지시키고, 안정화 상태라면 삭제해주시길 바랍니다
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawCube(transform.position + Vector3.down * playerFootSize, new Vector3(0.4f, 0.2f, 0.4f));
+    }
+    private void GroundCheck()
+    {
+        //boxcast를 이용하여 땅에 닿았는지 확인
+        RaycastHit hit;
+        if (Physics.BoxCast(transform.position, new Vector3(0.4f, 0.2f, 0.4f), Vector3.down, out hit, Quaternion.identity, playerFootSize, playerLayerMask))
+        {
+            isGround = true;
+        }
+        else
+        {
+            isGround = false;
+        }
+        
+
+
+    }
+     private void Move()
     {
         bool isMove = _mMoveInput.magnitude != 0; // 이동 입력이 있는지 확인
 
@@ -61,8 +97,8 @@ public class PlayerMovement : MonoBehaviour
             // 캐릭터 컨트롤러를 이용한 이동
             _characterController.Move(moveDir * (playerSpeed * Time.deltaTime));
         }
-
-        if (_characterController.isGrounded)
+        //GroundChecker.GetComponent<CheckGround>().isGrounded
+        if (isGround)
         {
             // 점프 입력이 있을 때
             if (Input.GetButton("Jump")) //ntw : GetButtonDown에서 입력이 씹히는 현상이 발견되어 GetButton으로 교체
