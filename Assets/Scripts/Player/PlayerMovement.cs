@@ -6,6 +6,14 @@ using UnityEngine.Serialization;
 
 public class PlayerMovement : MonoBehaviour
 {
+    /* Player 이동 관련 스크립트
+     * 기능 : x-z 평면 이동, 점프, 중력 적용
+     * 사용 컴포넌트 : CharacterController
+     *
+     * 주목사항 : 점프 관련 함수 최적화(CharacterController.isGrounded -> BoxCast로 변경)
+     * 
+     * 추후 보완 사항 : 함수 및 변수명 일관화 필요, 점프 쿨타임 고려
+     */
     private GameObject player;
     private PlayerState playerState;
 
@@ -13,7 +21,7 @@ public class PlayerMovement : MonoBehaviour
     public float playerSpeed = 5.0f;          // 플레이어 이동 속도
     public float _jumpForce = 3.0f;            // 점프 힘
     public float _gravity = -9.81f;            // 중력 가속도
-    //중력과 점프 힘을 
+    //중력과 점프 힘을 적절히 조절할 것
     
     public Transform mCameraArm;              // 카메라 암 Transform
     
@@ -25,12 +33,10 @@ public class PlayerMovement : MonoBehaviour
     //Ground Checking
     [SerializeField]
     private bool isGround;
-    private int playerLayerMask;//~Player임
+    private int playerLayerMask;//~Player임(그대로 사용 시, 플레이어만 무시함)
     [SerializeField]
     private float playerFootSize;//몸통에서 아래쪽으로 케스팅 시작할 거리(클수록 아래)
-
-
-
+    
     private Vector3 _mMoveInput;              // 플레이어 이동 입력값
     private Vector3 _verticalVelocity;        // 수직 속도
     
@@ -39,7 +45,6 @@ public class PlayerMovement : MonoBehaviour
         _characterController = GetComponent<CharacterController>(); // 캐릭터 컨트롤러 컴포넌트 가져오기
         player = transform.gameObject;
         playerState = player.GetComponent<PlayerState>();
-
         playerLayerMask = (-1) - (1 << LayerMask.NameToLayer("Player"));
     }
     private void Update()
@@ -50,6 +55,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void OnDrawGizmos()
     {
+        // Unity Editor상에서 캐릭터의 바닥에 캐스팅되는 박스를 그려줌, 디버그용
         // NEED DELETE : 이 코드는 점프 코드가 안정화 될 때까지 유지시키고, 안정화 상태라면 삭제해주시길 바랍니다
         Gizmos.color = Color.cyan;
         Gizmos.DrawCube(transform.position + Vector3.down * playerFootSize, new Vector3(0.4f, 0.2f, 0.4f));
@@ -66,9 +72,6 @@ public class PlayerMovement : MonoBehaviour
         {
             isGround = false;
         }
-        
-
-
     }
      private void Move()
     {
