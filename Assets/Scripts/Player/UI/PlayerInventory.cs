@@ -52,8 +52,6 @@ public class PlayerInventory : MonoBehaviour
     public void DropItem(int itemId, int count = 1, Vector3 direction = default(Vector3))
     {
         /*
-         * 프리팹 생성해서 떨어뜨리는거는 아이템 스크립트에서 해야할듯
-         * 아 그냥 여기서 구현하고 거기서 콜하지 뭐
          * 
          * NEED FIX : 버릴 때, 별도의 Item Stack 검사가 필요한 지 체크 필요
          * NEED ADD : 중요 아이템은 못버리게 설정
