@@ -20,7 +20,7 @@ public class EnemyBase : MonoBehaviour
     public float speed;
     public float damage;
     Rigidbody rigidbody;
-
+    //yaho~
     void Start()
     {
         charaLayer = LayerMask.NameToLayer("Player");
