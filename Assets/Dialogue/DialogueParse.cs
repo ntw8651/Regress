@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using TMPro;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,11 @@ public class DialogueParse : MonoBehaviour
     // 대사를 저장할 구조체
     private static Dictionary<string, TalkData[]> DialoueDictionary = 
         new Dictionary<string, TalkData[]>();
+    
+    private string _oneDialogue;
+    private float delay = 0.05f;
+    private bool _isDialogueActive = false;
+    private bool _isDialogueEnd = false;
     
     // [SerializeField] 는 private로 선언된 변수도 인스펙터 창에 노출되게 해줍니다.
     [SerializeField] private TextAsset csvFile = null;
@@ -69,9 +75,15 @@ public class DialogueParse : MonoBehaviour
             DialoueDictionary.Add(eventName, talkDataList.ToArray()); // 이벤트 이름과 대사들을 딕셔너리에 추가
         }
     }
-    
+
     public void DebugDialogue(TalkData[] talkDatas)
     {
+        StartCoroutine(DisplayDialogue(talkDatas));
+    }
+    
+    public IEnumerator DisplayDialogue(TalkData[] talkDatas)
+    {
+        _isDialogueActive = true;
         for (int i = 0; i < talkDatas.Length; i++)
         {
             // 캐릭터 이름 출력
@@ -81,9 +93,25 @@ public class DialogueParse : MonoBehaviour
             foreach (string context in talkDatas[i].contexts)
             {
                 Debug.Log(context);
-                contextText.text = context;
-            } 
+                _oneDialogue = context;
+                StartCoroutine(TextPrint(delay));
+                yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space));
+                contextText.text = "";
+            }
             
+            
+        }
+        _isDialogueActive = false;
+    }
+    
+    IEnumerator TextPrint(float time)
+    {
+        int count = 0;
+        while (count != _oneDialogue.Length)
+        {
+            contextText.text += _oneDialogue[count].ToString();
+            count++;
+            yield return new WaitForSeconds(time);
         }
     }
 }
