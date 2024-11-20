@@ -1,28 +1,21 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Random = UnityEngine.Random;
+using UnityEngine.UI;
 
 public class CameraEffector : MonoBehaviour
 {
-    /* 
-     * 위아래 카메라 블랙박스 on off
-     * 
-     * 카메라 진동
-     * 
-     * 카메라 이벤트 트리거
-     */
     [SerializeField]
     private GameObject camera;
-    
-    
+
     [SerializeField]
     private GameObject blacker;
 
+    [SerializeField]
+    private GameObject blackScreen;
+    
     public void BlackBoxSwitch()
     {
-        if(blacker.activeSelf)
+        if (blacker.activeSelf)
         {
             blacker.SetActive(false);
         }
@@ -31,10 +24,12 @@ public class CameraEffector : MonoBehaviour
             blacker.SetActive(true);
         }
     }
+
     public void BlackBoxOff()
     {
         blacker.SetActive(false);
     }
+
     public void BlackBoxOn()
     {
         blacker.SetActive(true);
@@ -49,7 +44,17 @@ public class CameraEffector : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.V))
         {
-            
+            CameraShake(1f, 0.1f);
+        }
+
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            StartCoroutine(FadeOut(1f));
+        }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            StartCoroutine(FadeIn(1f));
         }
     }
 
@@ -57,7 +62,7 @@ public class CameraEffector : MonoBehaviour
     {
         StartCoroutine(Shake(duration, magnitude));
     }
-    
+
     IEnumerator Shake(float duration, float magnitude)
     {
         Vector3 originalPos = camera.transform.localPosition;
@@ -73,8 +78,42 @@ public class CameraEffector : MonoBehaviour
 
         camera.transform.localPosition = originalPos;
     }
-    
-    
-    
-    
+
+    IEnumerator FadeOut(float duration)
+    {
+        Color color = blackScreen.GetComponent<Image>().color;
+        float startAlpha = color.a;
+        float rate = 1.0f / duration;
+        float progress = 0.0f;
+
+        while (progress < 1.0f)
+        {
+            color.a = Mathf.Lerp(startAlpha, 0, progress);
+            blackScreen.GetComponent<Image>().color = color;
+            progress += rate * Time.deltaTime;
+            yield return null;
+        }
+
+        color.a = 0;
+        blackScreen.GetComponent<Image>().color = color;
+    }
+
+    IEnumerator FadeIn(float duration)
+    {
+        Color color = blackScreen.GetComponent<Image>().color;
+        float startAlpha = color.a;
+        float rate = 1.0f / duration;
+        float progress = 0.0f;
+
+        while (progress < 1.0f)
+        {
+            color.a = Mathf.Lerp(startAlpha, 1, progress);
+            blackScreen.GetComponent<Image>().color = color;
+            progress += rate * Time.deltaTime;
+            yield return null;
+        }
+
+        color.a = 1;
+        blackScreen.GetComponent<Image>().color = color;
+    }
 }
