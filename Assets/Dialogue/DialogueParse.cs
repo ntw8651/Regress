@@ -117,12 +117,10 @@ public class DialogueParse : MonoBehaviour
                 _coroutine = StartCoroutine(TextPrint(delay));
                 if (_interactDia)
                 {
-                    StartCoroutine(TimerCoroutine(3));
                     interactText.text = "";
                 }
                 else
                 {
-                    StartCoroutine(VCoroutine());
                     contextText.text = "";
                 }
             }
@@ -133,17 +131,7 @@ public class DialogueParse : MonoBehaviour
         contextText.text = "";
         interactText.text = "";
     }
-
     
-    IEnumerator TimerCoroutine(float time)
-    {
-        yield return new WaitForSeconds(time);
-    }
-    
-    IEnumerator VCoroutine()
-    {
-        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.V));
-    }
     
     IEnumerator TextPrint(float time)
     {
