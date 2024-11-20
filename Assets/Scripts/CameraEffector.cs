@@ -1,3 +1,4 @@
+using BOKI.LowPolyNature.Scripts;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -49,12 +50,12 @@ public class CameraEffector : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.O))
         {
-            StartCoroutine(FadeOut(1f));
+            FadeOut(1f);
         }
 
         if (Input.GetKeyDown(KeyCode.P))
         {
-            StartCoroutine(FadeIn(1f));
+            FadeIn(1f);
         }
     }
 
@@ -79,7 +80,11 @@ public class CameraEffector : MonoBehaviour
         camera.transform.localPosition = originalPos;
     }
 
-    IEnumerator FadeOut(float duration)
+    public void FadeOut(float duration)
+    {
+        StartCoroutine(FadeOutCorutine(duration));
+    }
+    public IEnumerator FadeOutCorutine(float duration)
     {
         Color color = blackScreen.GetComponent<Image>().color;
         float startAlpha = color.a;
@@ -98,7 +103,12 @@ public class CameraEffector : MonoBehaviour
         blackScreen.GetComponent<Image>().color = color;
     }
 
-    IEnumerator FadeIn(float duration)
+    
+    public void FadeIn(float duration)
+    {
+        StartCoroutine(FadeInCorutine(duration));
+    }
+    public IEnumerator FadeInCorutine(float duration)
     {
         Color color = blackScreen.GetComponent<Image>().color;
         float startAlpha = color.a;
