@@ -60,6 +60,10 @@ public class CheckInteraction : MonoBehaviour
         {
             interactText.text = "Press F to talk to the NPC.";
         }
+        else if (interactable.Name == "III")
+        {
+            interactText.text = "상호작용";
+        }
         else
         {
             interactText.text = "Press F to pick up " + interactable.Name;

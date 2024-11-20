@@ -8,6 +8,7 @@ public class DialogueParse : MonoBehaviour
 {
     public TMP_Text nameText;
     public TMP_Text contextText;
+    public TMP_Text interactText;
     // 대사를 저장할 구조체
     private static Dictionary<string, TalkData[]> DialoueDictionary = 
         new Dictionary<string, TalkData[]>();
@@ -16,6 +17,9 @@ public class DialogueParse : MonoBehaviour
     private float delay = 0.05f;
     private bool _isDialogueActive = false;
     private bool _isDialogueEnd = false;
+    private bool _interactDia = false;
+    private Coroutine _coroutine;
+    private WaitForSeconds _timerCoroutine;
     
     // [SerializeField] 는 private로 선언된 변수도 인스펙터 창에 노출되게 해줍니다.
     [SerializeField] private TextAsset csvFile = null;
@@ -78,40 +82,87 @@ public class DialogueParse : MonoBehaviour
 
     public void DebugDialogue(TalkData[] talkDatas)
     {
-        StartCoroutine(DisplayDialogue(talkDatas));
+        _interactDia = false;
+        interactText.text = "";
+        DisplayDialogue(talkDatas);
     }
-    
-    public IEnumerator DisplayDialogue(TalkData[] talkDatas)
+    public void InteractDialogue(TalkData[] talkDatas)
+    {
+        _interactDia = true;
+        contextText.text = "";
+        DisplayDialogue(talkDatas);
+    }
+    private void DisplayDialogue(TalkData[] talkDatas)
     {
         _isDialogueActive = true;
+        contextText.text = "";
+        interactText.text = "";
         for (int i = 0; i < talkDatas.Length; i++)
         {
+            if (_coroutine != null)
+            {
+                StopCoroutine(_coroutine);
+            }
+
+            
             // 캐릭터 이름 출력
             Debug.Log(talkDatas[i].name);
+            nameText.text = "";
             nameText.text = talkDatas[i].name;
             // 대사들 출력
             foreach (string context in talkDatas[i].contexts)
             {
                 Debug.Log(context);
                 _oneDialogue = context;
-                StartCoroutine(TextPrint(delay));
-                yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space));
-                contextText.text = "";
+                _coroutine = StartCoroutine(TextPrint(delay));
+                if (_interactDia)
+                {
+                    StartCoroutine(TimerCoroutine(3));
+                    interactText.text = "";
+                }
+                else
+                {
+                    StartCoroutine(VCoroutine());
+                    contextText.text = "";
+                }
             }
-            
             
         }
         _isDialogueActive = false;
+        _interactDia = false;
+        contextText.text = "";
+        interactText.text = "";
+    }
+
+    
+    IEnumerator TimerCoroutine(float time)
+    {
+        yield return new WaitForSeconds(time);
+    }
+    
+    IEnumerator VCoroutine()
+    {
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.V));
     }
     
     IEnumerator TextPrint(float time)
     {
+        _oneDialogue = _oneDialogue.Replace("Ⓐ", "\n");
         int count = 0;
+        contextText.text = "";
+        interactText.text = "";
         while (count != _oneDialogue.Length)
         {
-            contextText.text += _oneDialogue[count].ToString();
+            if (_interactDia)
+            {
+                interactText.text += _oneDialogue[count].ToString();
+            }
+            else
+            {
+                contextText.text += _oneDialogue[count].ToString();
+            }
             count++;
             yield return new WaitForSeconds(time);
         }
     }
-}
+} // 은겨리 ♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥
