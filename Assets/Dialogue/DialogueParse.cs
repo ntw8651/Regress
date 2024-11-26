@@ -84,15 +84,15 @@ public class DialogueParse : MonoBehaviour
     {
         _interactDia = false;
         interactText.text = "";
-        DisplayDialogue(talkDatas);
+        StartCoroutine(DisplayDialogue(talkDatas));
     }
     public void InteractDialogue(TalkData[] talkDatas)
     {
         _interactDia = true;
         contextText.text = "";
-        DisplayDialogue(talkDatas);
+        StartCoroutine(DisplayDialogue(talkDatas));
     }
-    private void DisplayDialogue(TalkData[] talkDatas)
+    IEnumerator DisplayDialogue(TalkData[] talkDatas)
     {
         _isDialogueActive = true;
         contextText.text = "";
@@ -117,6 +117,7 @@ public class DialogueParse : MonoBehaviour
                 _coroutine = StartCoroutine(TextPrint(delay));
                 if (_interactDia)
                 {
+                    yield return new WaitForSeconds(3);
                     interactText.text = "";
                 }
                 else
