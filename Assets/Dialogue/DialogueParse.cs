@@ -21,6 +21,8 @@ public class DialogueParse : MonoBehaviour
     private Coroutine _coroutine;
     private WaitForSeconds _timerCoroutine;
     
+    private int _count = 0;
+    
     // [SerializeField] 는 private로 선언된 변수도 인스펙터 창에 노출되게 해줍니다.
     [SerializeField] private TextAsset csvFile = null;
 
@@ -83,74 +85,114 @@ public class DialogueParse : MonoBehaviour
     public void DebugDialogue(TalkData[] talkDatas)
     {
         _interactDia = false;
-        interactText.text = "";
-        StartCoroutine(DisplayDialogue(talkDatas));
+        if (!_isDialogueActive)
+        {
+            StartCoroutine(DisplayDialogue(talkDatas));
+        }
     }
+
     public void InteractDialogue(TalkData[] talkDatas)
     {
         _interactDia = true;
-        contextText.text = "";
-        StartCoroutine(DisplayDialogue(talkDatas));
+        if (!_isDialogueActive)
+        {
+            StartCoroutine(DisplayDialogue(talkDatas));
+        }
     }
+
     IEnumerator DisplayDialogue(TalkData[] talkDatas)
     {
+        if(_isDialogueActive)
+        {
+            yield break;
+        }
+        
         _isDialogueActive = true;
         contextText.text = "";
         interactText.text = "";
-        for (int i = 0; i < talkDatas.Length; i++)
+        nameText.text = "";
+
+        int _lineCount = 0;
+        int Whiler = 0;
+        while (_lineCount < talkDatas.Length)
         {
+            Whiler += 1;
+            if(Whiler > 1000)
+            {
+                break;
+            }
+                
             if (_coroutine != null)
             {
                 StopCoroutine(_coroutine);
+                _coroutine = StartCoroutine(TextPrint(0));
             }
-
-            
-            // 캐릭터 이름 출력
-            Debug.Log(talkDatas[i].name);
-            nameText.text = "";
-            nameText.text = talkDatas[i].name;
-            // 대사들 출력
-            foreach (string context in talkDatas[i].contexts)
+            else
             {
-                Debug.Log(context);
-                _oneDialogue = context;
-                _coroutine = StartCoroutine(TextPrint(delay));
-                if (_interactDia)
-                {
-                    yield return new WaitForSeconds(3);
-                    interactText.text = "";
-                }
-                else
+                // 캐릭터 이름 출력
+                Debug.Log(talkDatas[_lineCount].name);
+                nameText.text = "";
+                nameText.text = talkDatas[_lineCount].name;
+                
+                // 대사들 출력
+                foreach (string context in talkDatas[_lineCount].contexts)
                 {
                     contextText.text = "";
+                    nameText.text = "";
+                    Debug.Log(context);
+                    nameText.text = talkDatas[_lineCount].name;
+                    _oneDialogue = context;
+                    _count = 0;
+                    _coroutine = StartCoroutine(TextPrint(delay));
+                    if (_interactDia)
+                    {
+                        yield return new WaitForSeconds(3);
+                        interactText.text = "";
+                    }
+                    else
+                    { 
+                        yield return new WaitForSeconds(0.1f);
+                        
+                        //contextText.text = "";
+                    }
                 }
+                _lineCount++;
             }
-            
+
+            while (!Input.GetKeyDown(KeyCode.F))
+            {
+                // Whiler += 1;
+                if(Whiler > 1000)
+                {
+                    break;
+                }
+                yield return null;
+            } 
         }
         _isDialogueActive = false;
         _interactDia = false;
         contextText.text = "";
         interactText.text = "";
+        nameText.text = "";
     }
     
     
     IEnumerator TextPrint(float time)
     {
         _oneDialogue = _oneDialogue.Replace("Ⓐ", "\n");
-        int count = 0;
-        contextText.text = "";
-        interactText.text = "";
-        while (count != _oneDialogue.Length)
+        //contextText.text = "";
+        //interactText.text = "";
+        while (_count != _oneDialogue.Length)
         {
             if (_interactDia)
             {
-                interactText.text += _oneDialogue[count].ToString();
+                interactText.text += _oneDialogue[_count].ToString();
             }
             else
             {
-                contextText.text += _oneDialogue[count].ToString();
+                contextText.text += _oneDialogue[_count].ToString();
             }
-            count++;
+            _count++;
             yield return new WaitForSeconds(time);
         }
     }
