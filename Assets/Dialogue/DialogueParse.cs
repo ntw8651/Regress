@@ -113,19 +113,16 @@ public class DialogueParse : MonoBehaviour
         nameText.text = "";
 
         int _lineCount = 0;
-        int Whiler = 0;
+
         while (_lineCount < talkDatas.Length)
         {
-            Whiler += 1;
-            if(Whiler > 1000)
-            {
-                break;
-            }
+
                 
             if (_coroutine != null)
             {
                 StopCoroutine(_coroutine);
                 _coroutine = StartCoroutine(TextPrint(0));
+                yield return new WaitForSeconds(0.1f);
             }
             else
             {
@@ -161,11 +158,7 @@ public class DialogueParse : MonoBehaviour
 
             while (!Input.GetKeyDown(KeyCode.F))
             {
-                // Whiler += 1;
-                if(Whiler > 1000)
-                {
-                    break;
-                }
+
                 yield return null;
             } 
         }
