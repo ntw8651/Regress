@@ -13,35 +13,14 @@ public class TestInteractionDoor : MonoBehaviour, IInteration
     
     void Interaction()
     {
-        isProcessing = true;
-        if (isOpen)
-        {
-            
-            for(int i = 0; i < 10; i++)
-            {
-                transform.Rotate(new Vector3(0, 0, i * 10));
-            }
-            isOpen = false;
-        }
-        else
-        {
-            for (int i = 0; i < 10; i++)
-            {
-                transform.Rotate(new Vector3(0, 0, -i * 10));
-            }
-            isOpen = true;
-        }
-        isProcessing = false;
+
     }
 
     public void Interact(GameObject player)
     {
-        Debug.Log(transform.rotation);
-        Debug.Log(transform.localRotation);
-        if (isProcessing == false)
-        {
-            Interaction();
-        }
+        Debug.Log(transform.name + " is interacted");
+        Interaction();
+        
     }
     
     public Object GetObject()

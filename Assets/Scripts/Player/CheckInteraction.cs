@@ -13,34 +13,84 @@ public class CheckInteraction : MonoBehaviour
      */
     public TMP_Text interactText;
     public GameObject targetObject; // 상호작용 대상 오브젝트, 추후 다른 스크립트에서 참조할 수 있도록 public으로 선언
-  
+    
+    [SerializeField]
+    private float maxDistance = 3f;
     private void Update()
     {
         Collider[] _colliders;
         _colliders = Physics.OverlapSphere(transform.position, 3f);
         // 상호작용 가능 개체 탐색
         // NEED FIX : 함수화 하여 Update를 깔끔히 할 것
-        if (_colliders.Length > 0)
+        
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 3f) && hit.collider.GetComponent<IInteration>() != null)
         {
-            float _minDistance = float.MaxValue;
-            GameObject _targetObject = null;
-            foreach (var col in _colliders)
+            // 여기에 layermask 거꾸로 해서 날리고, 만약 없으면
+            // OK, 근데 만약 layermask거꾸로 해서 뭔가 걸리면 사이에 오브젝트가 있으므로
+            // 레이케스팅 실패
+
+            if (targetObject != hit.collider.gameObject)
             {
-                
-                IInteration interactable = col.GetComponent<IInteration>();
-                
-                if (interactable != null)
+                //Debug.DrawRay(ray.origin, ray.direction * 20, Color.red, 10f);
+                if (targetObject != null)
                 {
-                    if (_minDistance > Vector3.Distance(transform.position, col.transform.position))
+                    Destroy(targetObject.GetComponent<Outline>());
+                }
+
+                targetObject = hit.collider.gameObject;
+                targetObject.AddComponent<Outline>();
+            }
+        }
+        else
+        {
+            if (_colliders.Length > 0)
+            {
+                float _minDistance = float.MaxValue;
+                GameObject _targetObject = null;
+                foreach (var col in _colliders)
+                {
+                    IInteration interactable = col.GetComponent<IInteration>();
+                
+                    if (interactable != null)
                     {
-                        _minDistance = Vector3.Distance(transform.position, col.transform.position);
-                        _targetObject = col.gameObject;
+                        if (_minDistance > Vector3.Distance(transform.position, col.transform.position))
+                        {
+                            _minDistance = Vector3.Distance(transform.position, col.transform.position);
+                            _targetObject = col.gameObject;
+                        }
                     }
                 }
 
-            }
 
-            targetObject = _targetObject;
+                if (_targetObject != null)
+                {
+                    if (targetObject != _targetObject)
+                    {
+                        if (targetObject != null)
+                        {
+                            Destroy(targetObject.GetComponent<Outline>());
+                        }
+
+                        targetObject = _targetObject;
+                        targetObject.AddComponent<Outline>();
+                    }
+                }
+                else
+                {
+                    if (targetObject != null)
+                    {
+                        Destroy(targetObject.GetComponent<Outline>());
+                    }
+                    targetObject = null;
+                }
+            }
+            else if (targetObject != null)
+            {
+                Destroy(targetObject.GetComponent<Outline>());
+                targetObject = null;
+            }
         }
         Interact();
     }
