@@ -32,13 +32,15 @@ public class PlayerMovement : MonoBehaviour
 
     //Ground Checking
     [SerializeField]
-    private bool isGround;
+    public bool isGround;
     private int playerLayerMask;//~Player임(그대로 사용 시, 플레이어만 무시함)
     [SerializeField]
     private float playerFootSize;//몸통에서 아래쪽으로 케스팅 시작할 거리(클수록 아래)
     
     private Vector3 _mMoveInput;              // 플레이어 이동 입력값
     private Vector3 _verticalVelocity;        // 수직 속도
+    
+    
     
     private void Start()
     {
