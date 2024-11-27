@@ -188,5 +188,5 @@ public class DialogueParse : MonoBehaviour
             _count++;
             yield return new WaitForSeconds(time);
         }
-    }
+    }    
 } // 은겨리 ♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥

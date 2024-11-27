@@ -12,7 +12,7 @@ public class Inter : MonoBehaviour, IInteraction
     
     public TalkData[] GetObjectDialogue()
     {
-        return DialogueParse.GetDialogue(eventName);
+        return DialogueParseR.GetDialogue(eventName);
     }
     
     public void Interact(GameObject player)
@@ -20,7 +20,7 @@ public class Inter : MonoBehaviour, IInteraction
         TalkData[] talkDatas = GetObjectDialogue();
         if (talkDatas != null)
         {
-            player.GetComponent<DialogueParse>().InteractDialogue(talkDatas);
+            player.GetComponent<DialogueParseR>().InteractDialogue(talkDatas);
         }
     }
 }
