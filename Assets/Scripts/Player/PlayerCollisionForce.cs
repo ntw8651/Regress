@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PlayerCollisionForce : MonoBehaviour
 {
-    /*
-     * Rigidbody와 같은 플레이어의 충돌을 구현하는 스크립트
+    /* Rigidbody와 같은 플레이어의 충돌을 구현하는 스크립트
+     * ChacterController의 OnControllerColliderHit 함수를 사용하여 구현
      * 
      * 현재 닿은 오브젝트에게 현재 플레이어의 이동 방향 속도에 비례하는 힘을 가한다
      * 충돌 오브젝트에 힘을 가할 때, AddForceAtPosition을 사용하여 충돌 지점에 힘을 가한다
