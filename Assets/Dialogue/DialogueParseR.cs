@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class DialogueParseR : MonoBehaviour
 {
-    public TMP_Text nameText;
-    public TMP_Text contextText;
     public TMP_Text interactText;
     // 대사를 저장할 구조체
     private static Dictionary<string, TalkData[]> DialoueDictionary = 
@@ -84,26 +82,29 @@ public class DialogueParseR : MonoBehaviour
 
     public void DebugDialogue(TalkData[] talkDatas)
     {
-        StartCoroutine(DisplayDialogueContext(talkDatas));
+        _interactDia = false;
+        if (!_isDialogueActive)
+        {
+            StartCoroutine(DisplayDialogueContext(talkDatas));
+        }
     }
 
     public void InteractDialogue(TalkData[] talkDatas)
     {
-        StartCoroutine(DisplayDialogueInteract(talkDatas));
+        _interactDia = true;
+        if (!_isDialogueActive)
+        {
+            StartCoroutine(DisplayDialogueInteract(talkDatas));
+        }
     }
 
     IEnumerator DisplayDialogueContext(TalkData[] talkDatas)
     {
-        contextText.text = "";
         interactText.text = "";
-        nameText.text = "";
-
         int _lineCount = 0;
 
         while (_lineCount < talkDatas.Length)
         {
-
-                
             if (_coroutine != null)
             {
                 StopCoroutine(_coroutine);
@@ -114,16 +115,11 @@ public class DialogueParseR : MonoBehaviour
             {
                 // 캐릭터 이름 출력
                 Debug.Log(talkDatas[_lineCount].name);
-                nameText.text = "";
-                nameText.text = talkDatas[_lineCount].name;
                 
                 // 대사들 출력
                 foreach (string context in talkDatas[_lineCount].contexts)
                 {
-                    contextText.text = "";
-                    nameText.text = "";
                     Debug.Log(context);
-                    nameText.text = talkDatas[_lineCount].name;
                     _oneDialogue = context;
                     _count = 0;
                     _coroutine = StartCoroutine(TextPrintContext(delay));
@@ -149,17 +145,13 @@ public class DialogueParseR : MonoBehaviour
         }
         _isDialogueActive = false;
         _interactDia = false;
-        contextText.text = "";
         interactText.text = "";
-        nameText.text = "";
     }
     
     IEnumerator DisplayDialogueInteract(TalkData[] talkDatas)
     {
         _isDialogueActive = true;
-        contextText.text = "";
         interactText.text = "";
-        nameText.text = "";
 
         int _lineCount = 0;
 
@@ -177,16 +169,10 @@ public class DialogueParseR : MonoBehaviour
             {
                 // 캐릭터 이름 출력
                 Debug.Log(talkDatas[_lineCount].name);
-                nameText.text = "";
-                nameText.text = talkDatas[_lineCount].name;
-                
                 // 대사들 출력
                 foreach (string context in talkDatas[_lineCount].contexts)
                 {
-                    contextText.text = "";
-                    nameText.text = "";
                     Debug.Log(context);
-                    nameText.text = talkDatas[_lineCount].name;
                     _oneDialogue = context;
                     _count = 0;
                     _coroutine = StartCoroutine(TextPrintInteract(delay));
@@ -204,17 +190,10 @@ public class DialogueParseR : MonoBehaviour
                 }
                 _lineCount++;
             }
-
-            while (!Input.GetKeyDown(KeyCode.F))
-            {
-                yield return null;
-            } 
         }
         _isDialogueActive = false;
         _interactDia = false;
-        contextText.text = "";
         interactText.text = "";
-        nameText.text = "";
     }
     
     
@@ -225,7 +204,6 @@ public class DialogueParseR : MonoBehaviour
         //interactText.text = "";
         while (_count != _oneDialogue.Length)
         {
-            contextText.text += _oneDialogue[_count].ToString();
             _count++;
             yield return new WaitForSeconds(time);
         }

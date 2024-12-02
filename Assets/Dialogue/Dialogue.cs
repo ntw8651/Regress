@@ -18,7 +18,7 @@ public class Dialogue : MonoBehaviour, IInteraction
     
     public TalkData[] GetObjectDialogue()
     {
-        return DialogueParseR.GetDialogue(eventName);
+        return DialogueParse.GetDialogue(eventName);
     }
     
     public void Interact(GameObject player)
@@ -26,7 +26,7 @@ public class Dialogue : MonoBehaviour, IInteraction
         TalkData[] talkDatas = GetObjectDialogue();
         if (talkDatas != null)
         {
-            player.GetComponent<DialogueParseR>().DebugDialogue(talkDatas);
+            player.GetComponent<DialogueParse>().DebugDialogue(talkDatas);
         }
     }
 }

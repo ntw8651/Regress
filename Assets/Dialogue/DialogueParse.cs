@@ -109,7 +109,6 @@ public class DialogueParse : MonoBehaviour
         
         _isDialogueActive = true;
         contextText.text = "";
-        interactText.text = "";
         nameText.text = "";
 
         int _lineCount = 0;
@@ -141,17 +140,9 @@ public class DialogueParse : MonoBehaviour
                     _oneDialogue = context;
                     _count = 0;
                     _coroutine = StartCoroutine(TextPrint(delay));
-                    if (_interactDia)
-                    {
-                        yield return new WaitForSeconds(3);
-                        interactText.text = "";
-                    }
-                    else
-                    { 
-                        yield return new WaitForSeconds(0.1f);
-                        
-                        //contextText.text = "";
-                    }
+
+                    yield return new WaitForSeconds(0.1f);
+
                 }
                 _lineCount++;
             }
@@ -165,7 +156,6 @@ public class DialogueParse : MonoBehaviour
         _isDialogueActive = false;
         _interactDia = false;
         contextText.text = "";
-        interactText.text = "";
         nameText.text = "";
     }
     
