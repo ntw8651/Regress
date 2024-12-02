@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class InteractionLadder : MonoBehaviour, IInteration
+public class InteractionLadder : MonoBehaviour, IInteraction
 {
     public int type = 0;
     private bool isProcessing = false;

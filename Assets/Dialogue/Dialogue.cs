@@ -6,8 +6,10 @@ public struct TalkData
     public string name; // 대사 치는 캐릭터 이름
     public string[] contexts; // 대사 내용
 }
-public class Dialogue : MonoBehaviour
+public class Dialogue : MonoBehaviour, IInteraction
 {
+    public string Name { get; private set; } = "ITR";
+    public GameObject player;
 
     // 대화 이벤트 이름
     [SerializeField] string eventName = null;
@@ -17,5 +19,14 @@ public class Dialogue : MonoBehaviour
     public TalkData[] GetObjectDialogue()
     {
         return DialogueParse.GetDialogue(eventName);
+    }
+    
+    public void Interact(GameObject player)
+    {
+        TalkData[] talkDatas = GetObjectDialogue();
+        if (talkDatas != null)
+        {
+            player.GetComponent<DialogueParse>().DebugDialogue(talkDatas);
+        }
     }
 }

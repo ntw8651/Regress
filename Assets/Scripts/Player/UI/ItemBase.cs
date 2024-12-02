@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemBase : MonoBehaviour, IInteration
+public class ItemBase : MonoBehaviour, IInteraction
 {
     /* "획득" 가능한 아이템으로써, 아이템의 정보를 가지고 있는 스크립트
      * 

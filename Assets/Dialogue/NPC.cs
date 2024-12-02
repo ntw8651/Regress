@@ -4,14 +4,9 @@ using UnityEngine;
 
 public class NPC : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public string Name { get; private set; } = "NPC";
 
-    // Update is called once per frame
-    void Update()
+    public void Interact(GameObject player)
     {
         
     }
