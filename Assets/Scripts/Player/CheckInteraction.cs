@@ -25,7 +25,7 @@ public class CheckInteraction : MonoBehaviour
         
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 3f) && hit.collider.GetComponent<IInteration>() != null)
+        if (Physics.Raycast(ray, out hit, 3f) && hit.collider.GetComponent<IInteraction>() != null)
         {
             // 여기에 layermask 거꾸로 해서 날리고, 만약 없으면
             // OK, 근데 만약 layermask거꾸로 해서 뭔가 걸리면 사이에 오브젝트가 있으므로
@@ -51,7 +51,7 @@ public class CheckInteraction : MonoBehaviour
                 GameObject _targetObject = null;
                 foreach (var col in _colliders)
                 {
-                    IInteration interactable = col.GetComponent<IInteration>();
+                    IInteraction interactable = col.GetComponent<IInteraction>();
                 
                     if (interactable != null)
                     {
@@ -102,7 +102,7 @@ public class CheckInteraction : MonoBehaviour
             interactText.text = "";
             return;
         }
-        IInteration interactable = targetObject.GetComponent<IInteration>();
+        IInteraction interactable = targetObject.GetComponent<IInteraction>();
 
         if (interactable.Name == "Door")
         {

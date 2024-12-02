@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class InteractLight : MonoBehaviour, IInteration
+public class InteractLight : MonoBehaviour, IInteraction
 {
     // Start is called before the first frame update
     public int type = 0;
