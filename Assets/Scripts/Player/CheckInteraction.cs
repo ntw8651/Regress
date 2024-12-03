@@ -116,6 +116,14 @@ public class CheckInteraction : MonoBehaviour
         {
             interactText.text = "Press F to talk to the NPC.";
         }
+        else if(interactable.Name == "Light")
+        {
+            interactText.text = "Press F to turn on/off the light";
+        }
+        else if(interactable.Name == "Memo")
+        {
+            interactText.text = "Press F to climb the ladder";
+        }
         else
         {
             // 해당 부분은 미정 상태
