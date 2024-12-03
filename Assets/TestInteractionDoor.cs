@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class TestInteractionDoor : MonoBehaviour, IInteration
+public class TestInteractionDoor : MonoBehaviour, IInteraction
 {
     // Start is called before the first frame update
     public int type = 0;
