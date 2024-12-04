@@ -89,12 +89,12 @@ public class DialogueParseR : MonoBehaviour
         }
     }
 
-    public void InteractDialogue(TalkData[] talkDatas)
+    public void InteractDialogue(string talkText)
     {
         _interactDia = true;
         if (!_isDialogueActive)
         {
-            StartCoroutine(DisplayDialogueInteract(talkDatas));
+            StartCoroutine(DisplayDialogueInteract(GetDialogue(talkText)));
         }
     }
 
