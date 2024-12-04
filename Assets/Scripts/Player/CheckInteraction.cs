@@ -116,6 +116,10 @@ public class CheckInteraction : MonoBehaviour
         {
             interactText.text = "Press F to talk to the NPC.";
         }
+        else if(interactable.Name == "Bed")
+        {
+            interactText.text = "Press F to sleep on the bed.";
+        }
         else
         {
             // 해당 부분은 미정 상태
