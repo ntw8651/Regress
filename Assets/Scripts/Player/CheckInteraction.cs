@@ -18,8 +18,8 @@ public class CheckInteraction : MonoBehaviour
     private float maxDistance = 3f;
     private void Update()
     {
-        Collider[] _colliders;
-        _colliders = Physics.OverlapSphere(transform.position, 3f);
+        Collider[] _colliders = {};
+        //_colliders = Physics.OverlapSphere(transform.position, 3f);
         // 상호작용 가능 개체 탐색
         // NEED FIX : 함수화 하여 Update를 깔끔히 할 것
         
