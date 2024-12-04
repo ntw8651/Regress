@@ -25,25 +25,6 @@ public class InteractionLadder : MonoBehaviour, IInteraction
         {
             return;
         }
-
-        bool value = false;
-        if (player.GetComponent<PlayerState>().UserVariableBools.TryGetValue("getHatchKey", out value))
-        {
-            if (value == false)
-            {
-                player.GetComponent<DialogueParseR>().InteractDialogue("닫혀있다");
-                return;
-            }
-        }
-        else
-        {
-            player.GetComponent<DialogueParseR>().InteractDialogue("닫혀있다");
-            return;
-        }
-        
-        
-        
-        
         isProcessing = true;
 
         StartCoroutine(HandleInteraction(player));
@@ -61,9 +42,8 @@ public class InteractionLadder : MonoBehaviour, IInteraction
         Debug.Log(player.transform.position);
         player.transform.position = targetObject.transform.position;
         player.transform.rotation = targetObject.transform.rotation;
-        //회전 재설정 필요
         Debug.Log(player.transform.position);
-        yield return new WaitForSeconds(0.1f);
+        
         // 화면 밝게 하기
         yield return StartCoroutine(cameraEffector.FadeOutCorutine(1f));
         isProcessing = false;

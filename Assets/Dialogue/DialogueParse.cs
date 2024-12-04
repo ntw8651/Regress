@@ -82,21 +82,21 @@ public class DialogueParse : MonoBehaviour
         }
     }
 
-    public void DebugDialogue(string talkText)
+    public void DebugDialogue(TalkData[] talkDatas)
     {
         _interactDia = false;
         if (!_isDialogueActive)
         {
-            StartCoroutine(DisplayDialogue(GetDialogue(talkText)));
+            StartCoroutine(DisplayDialogue(talkDatas));
         }
     }
 
-    public void InteractDialogue(string talkText)
+    public void InteractDialogue(TalkData[] talkDatas)
     {
         _interactDia = true;
         if (!_isDialogueActive)
         {
-            StartCoroutine(DisplayDialogue(GetDialogue(talkText)));
+            StartCoroutine(DisplayDialogue(talkDatas));
         }
     }
 

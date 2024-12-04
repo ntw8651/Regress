@@ -23,7 +23,7 @@ public class PlayerState : MonoBehaviour
     public float Health = 100;
 
     public bool isZoom = false;
-    public Dictionary<string, bool>UserVariableBools = new Dictionary<string, bool>();
+
     public bool isOpenInventory = false;
     public void GetDamage(float damage, Vector3 pos = default(Vector3))
     {
