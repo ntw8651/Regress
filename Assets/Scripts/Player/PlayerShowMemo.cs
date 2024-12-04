@@ -34,7 +34,7 @@ public class PlayerShowMemo : MonoBehaviour
         isProcessing = true;
         isShow = !isShow;
         memoObject.SetActive(isShow);
-        memoTMP.GetComponent<TMPro.TextMeshProUGUI>().text = content;
+        memoTMP.GetComponent<TMPro.TextMeshProUGUI>().text = content.Replace("\\n", "\n");
         isProcessing = false;
     }
     

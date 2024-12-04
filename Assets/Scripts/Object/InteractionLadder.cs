@@ -31,12 +31,13 @@ public class InteractionLadder : MonoBehaviour, IInteraction
         {
             if (value == false)
             {
-                
+                player.GetComponent<DialogueParseR>().InteractDialogue("닫혀있다");
                 return;
             }
         }
         else
         {
+            player.GetComponent<DialogueParseR>().InteractDialogue("닫혀있다");
             return;
         }
         
