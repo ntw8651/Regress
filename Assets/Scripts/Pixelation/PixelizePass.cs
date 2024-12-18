@@ -16,15 +16,40 @@ public class PixelizePass : ScriptableRenderPass
 
     public PixelizePass(PixelizeFeature.CustomPassSettings settings)
     {
+        if (settings == null)
+        {
+            Debug.LogError("CustomPassSettings is null.");
+            return;
+        }
+        
         this.settings = settings;
         this.renderPassEvent = settings.renderPassEvent;
-        if (material == null) material = CoreUtils.CreateEngineMaterial("Hidden/Pixelize");
+        if (material == null)
+        {
+            material = CoreUtils.CreateEngineMaterial("Hidden/Pixelize");
+            if (material == null)
+            {
+                Debug.LogError("Failed to create Pixelize material. Check if the shader exists.");
+            }
+        }
     }
 
 
 
     public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
     {
+        if (material == null)
+        {
+            Debug.LogError("Pixelize material is not initialized. Ensure 'Hidden/Pixelize' shader exists.");
+            return;
+        }
+
+        if (renderingData.cameraData.renderer == null)
+        {
+            Debug.LogError("Camera renderer is null. Check if the renderer is assigned in URP settings.");
+            return;
+        }
+        
         colorBuffer = renderingData.cameraData.renderer.cameraColorTarget;
         RenderTextureDescriptor descriptor = renderingData.cameraData.cameraTargetDescriptor;
 

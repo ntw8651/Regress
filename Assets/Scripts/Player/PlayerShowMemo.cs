@@ -6,7 +6,7 @@ public class PlayerShowMemo : MonoBehaviour
 {
     public GameObject memoObject;
     public GameObject memoTMP;
-    private bool isShow = false;
+    private int isShow = 0;
     private bool isProcessing = false;
     // 다른 키 입력 막기
     void Start()
@@ -18,10 +18,14 @@ public class PlayerShowMemo : MonoBehaviour
 
     public void Update()
     {
-        if (isShow && Input.GetKeyDown(KeyCode.F))
+        if (isShow > 1&& Input.GetKeyDown(KeyCode.F))
         {
-            isShow = false;
-            memoObject.SetActive(isShow);
+            isShow = 0;
+            memoObject.SetActive(false);
+        }
+        else if(Input.GetKeyDown(KeyCode.F))
+        {
+            isShow += 1;
         }
     }
     
@@ -32,8 +36,8 @@ public class PlayerShowMemo : MonoBehaviour
             return;
         }
         isProcessing = true;
-        isShow = !isShow;
-        memoObject.SetActive(isShow);
+        isShow = 1;
+        memoObject.SetActive(true);
         memoTMP.GetComponent<TMPro.TextMeshProUGUI>().text = content.Replace("\\n", "\n");
         isProcessing = false;
     }
