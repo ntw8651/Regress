@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 
 public class PlayerMovement : MonoBehaviour
@@ -16,8 +17,11 @@ public class PlayerMovement : MonoBehaviour
      */
     private GameObject player;
     private PlayerState playerState;
+    
+    public float walkSoundDelay = 0;
+    private float walkSoundNowTime = 0;
 
-
+    
     public float playerSpeed = 5.0f;          // 플레이어 이동 속도
     public float _jumpForce = 3.0f;            // 점프 힘
     public float _gravity = -9.81f;            // 중력 가속도
@@ -29,6 +33,12 @@ public class PlayerMovement : MonoBehaviour
     
     private CharacterController _characterController; // 캐릭터 컨트롤러 컴포넌트
 
+    
+    // 발걸음
+    private AudioSource audioSource;
+    public AudioClip[] walkingSound;
+    
+    
 
     //Ground Checking
     [SerializeField]
@@ -46,6 +56,9 @@ public class PlayerMovement : MonoBehaviour
         player = transform.gameObject;
         playerState = player.GetComponent<PlayerState>();
         playerLayerMask = (-1) - (1 << LayerMask.NameToLayer("Player"));
+        
+        // 발걸음
+        audioSource = GetComponent<AudioSource>();
     }
     private void Update()
     {
@@ -103,10 +116,18 @@ public class PlayerMovement : MonoBehaviour
         //GroundChecker.GetComponent<CheckGround>().isGrounded
         if (isGround)
         {
+            //걷고 있을 때 걷기 소리
+            if (_mMoveInput.magnitude > 0.1f)
+            {
+                walkSoundNowTime += Time.deltaTime * playerSpeed;
+            }
+
             // 점프 입력이 있을 때
             if (Input.GetButton("Jump")) //ntw : GetButtonDown에서 입력이 씹히는 현상이 발견되어 GetButton으로 교체
             {
                 _verticalVelocity.y = _jumpForce;
+                walkSoundNowTime = 0;
+                
             }
             //바닥에 닿아있으면 중력 가속도가 중첩되어선 안됨
             else
@@ -120,6 +141,13 @@ public class PlayerMovement : MonoBehaviour
             _verticalVelocity.y += _gravity * Time.deltaTime;
         }
         
+        //발걸음 소리 출력
+        if(walkSoundNowTime > walkSoundDelay)
+        {
+            walkSoundNowTime = 0;
+            Debug.Log(Random.Range(0, walkingSound.Length));
+            audioSource.PlayOneShot(walkingSound[Random.Range(0, walkingSound.Length)]);
+        }
         _characterController.Move(_verticalVelocity * Time.deltaTime);
     }
 }
