@@ -12,7 +12,7 @@ public class InteractionFlashLight : MonoBehaviour, IInteraction
     void Interaction(GameObject player)
     {
         light.GetComponent<Light>().enabled = true;
-        player.GetComponent<DialogueParseR>().InteractDialogue("닫혀있다");
+        player.GetComponent<DialogueParseR>().InteractDialogue("손전등");
         Destroy(transform.gameObject);
     }
 

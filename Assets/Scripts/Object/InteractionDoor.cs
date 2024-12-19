@@ -6,11 +6,26 @@ public class InteractionDoor : MonoBehaviour, IInteraction
     private bool isProcessing = false;
     public string Name { get; private set; } = "Door";
 
-    public GameObject light;
     
     void Interaction(GameObject player)
     {
-        player.GetComponent<DialogueParseR>().InteractDialogue("닫혀있다");
+        bool value = false;
+        if (player.GetComponent<PlayerState>().UserVariableBools.TryGetValue("getDoorKey", out value))
+        {
+            if (value == false)
+            {
+                player.GetComponent<DialogueParseR>().InteractDialogue("닫힌문");
+                return;
+            }
+        }
+        else
+        {
+            player.GetComponent<DialogueParseR>().InteractDialogue("닫힌문");
+            return;
+        }
+        player.GetComponent<DialogueParseR>().InteractDialogue("열린문");
+        Destroy(transform.gameObject);
+        
     }
 
 
